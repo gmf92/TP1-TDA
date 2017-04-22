@@ -54,7 +54,7 @@ def Puntos_Falla(arch):
 	fin = time()
 			
 	# cuenta los puntos de articulación	
-	for i in range(cant_v):	
+	for i in range(cant_v):
 		if puntos[i] == True:
 			#print(i)
 			cant_p += 1
@@ -115,8 +115,9 @@ def PADFS(grafo, a, visitado, descubrimiento, ancestro, puntos, bajo, momento):
 # cantidad de archivos a procesar
 cant_arch = 6
 
-for i in range(cant_arch):
-	Puntos_Falla('g' + str(i+1) + '.txt')
+#for i in range(cant_arch):
+#	Puntos_Falla('g' + str(i+1) + '.txt')
+Puntos_Falla('g1.txt')
 
 # -----------------------------------------
 
