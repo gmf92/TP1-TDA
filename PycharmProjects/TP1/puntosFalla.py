@@ -1,25 +1,35 @@
-import digrafo
+import sys
 from time import time
+import digrafo
 
-def Puntos_Falla(arch):
+
+# Llamar a la funcion Puntos_Falla con parametro por linea de comando
+# Lleva un sn solo parametro, a elegir entre: g1, g2 , g3, g4
+
+def Puntos_Falla():
 	
 	# abre un archivo con datos
-	archivo = open(arch,'r')
+	arch = str(sys.argv[1])
+	print(arch,".txt",sep="")
+	archivo = open(arch + ".txt",'r')
 	
 	# obtiene cantidad de vertices y aristas
 	cant_v = int(archivo.readline())
 	cant_a = int(archivo.readline())
 	
-	# crea un grafo vacío
+	# crea un grafo con cant_v vertices, sin aristas
 	grafo = digrafo.Digrafo(cant_v)
 	
 	# obtiene las aristas y las agrega al grafo
 	for i in range(cant_a):		
 		o, d = archivo.readline().split(" ")
 		grafo.agregarArista(int(o), int(d))
+		grafo.agregarArista(int(d), int(o))
 	
 	# cierra el archivo
 	archivo.close()
+	
+	#---------------------------------
 	
 	# para medir la ejecucion
 	inicio = time()
@@ -28,10 +38,10 @@ def Puntos_Falla(arch):
 	visitado = [False] * (cant_v)
 	
 	# inicializa momentos de descubrimiento
-	descubrimiento = [float] * (cant_v)
+	descubrimiento = [0] * (cant_v)
 	
 	# inicializa valores bajo
-	bajo = [float] * (cant_v)
+	bajo = [0] * (cant_v)
 	
 	# inicializa ancestros
 	ancestro = [-1] * (cant_v)
@@ -39,72 +49,72 @@ def Puntos_Falla(arch):
 	# inicializa puntos de articulacion
 	puntos = [False] * (cant_v)
 	
+	#inicializa cantidad de hijos para cada vertice
+	cant_h = [0] * (cant_v)
+	
 	# inicializa momento del descubrimiento
 	momento = 0
 	
-	# cantidad de puntos de articulacion
+	# contador de puntos de articulacion encontrados
 	cant_p = 0
 	
 	# llama al metodo recursivo para cada vertice
-	for i in range(cant_v):			
-		if visitado[i] == False:				
-			PADFS(grafo, i, visitado, puntos, ancestro, bajo, descubrimiento, momento)
+	for i in range(cant_v):		
+		if visitado[i] == False: 
+			visitado[i] = True				
+			PADFS(grafo, cant_h, i, visitado, bajo, descubrimiento, momento, cant_p, ancestro, puntos)
 			
 	# para medir la ejecucion
 	fin = time()
-			
-	# cuenta los puntos de articulación	
-	for i in range(cant_v):
-		if puntos[i] == True:
-			#print(i)
-			cant_p += 1
 	
+	#
+	print("\nPuntos de falla, version recursiva")
 	# muestra el resultado y el tiempo utilizado	
-	print('Archivo: ', arch)
+	print('Archivo: ',arch,".txt",sep="")
 	#print(grafo.obtenerGrafo())
+	
+	# cuenta y muestra los puntos de articulación encontrados
 	print('Cantidad de vertices: ', cant_v)
 	print('Cantidad de aristas : ', cant_a)
-	print("Cantidad de puntos de articulacion: ", cant_p)
+	print("Puntos de articulacion : ",)
+	for index, value in enumerate (puntos):
+		if value == True:
+			print(index, " ",end="")
+			cant_p += 1
+	print("\nCantidad de puntos de articulacion: ", cant_p)
 	print('Tiempo de ejecucion: ', (fin - inicio) * 1000, 'milisegundos\n')
 
 
-# metodo recursivo para encontrar puntos de articulacion
-def PADFS(grafo, a, visitado, descubrimiento, ancestro, puntos, bajo, momento):
-
-	# inicializa contador de hijos del nodo actual
-	cant_h = 0
-
-	# marca el nodo actual como visitado
-	visitado[a] = True
-
-	# inicializa momento de descubrimiento y valor bajo
+# funcion recursiva para encontrar puntos de articulacion
+def PADFS(grafo, cant_h, a, visitado, descubrimiento, bajo, momento, cant_p, ancestro, puntos):
+	# inicializa el nodo actual
+	cant_h[a] = 0
 	descubrimiento[a] = momento
 	bajo[a] = momento
-	
-	# incrementa el momento
-	momento += 1
 
 	# recorre los adyacentes del nodo actual
 	for v in grafo.adyacentes[a]:
-		
-		# si v no fue visitado, se agrega como hijo del actual, y se visita
+		# si v no fue visitado, lo visita
 		if visitado[v] == False:
+			visitado[v] = True
 			ancestro[v] = a
-			cant_h += 1
-			PADFS(grafo, v, visitado, descubrimiento, ancestro, puntos, bajo, momento)
+			cant_h[a] += 1
+			momento += 1
+			#llama a la funcion recursiva
+			PADFS(grafo, cant_h, v, visitado, descubrimiento, bajo, momento, cant_p, ancestro, puntos)
 
 			# asigna al vertice actual el valor bajo minimo
 			bajo[a] = min(bajo[a], bajo[v])
-				
+			
 			# si el nodo actual es raiz y tiene dos o mas hijos, es punto de articulacion
-			if ancestro[a] == -1 and cant_h > 1:
-				puntos[a] = True
+			if (ancestro[a] == -1) and (cant_h[a] > 1):
+				if puntos[a] == False: puntos[a] = True
 
 			# si el nodo actual no es raiz, y el valor bajo del hijo es mayor o igual
 			# al momento de descubrimiento del actual, el nodo actual es punto de articulacion 
 			if ancestro[a] != -1 and bajo[v] >= descubrimiento[a]:
-				puntos[a] = True
-				
+				if puntos[a] == False: puntos[a] = True
+						
 		# si ya fue visitado y es distinto al ancestro del actual, 
 		# se actualiza el valor bajo del actual 
 		elif v != ancestro[a]: 
@@ -112,12 +122,7 @@ def PADFS(grafo, a, visitado, descubrimiento, ancestro, puntos, bajo, momento):
 
 # -----------------------------------------
 
-# cantidad de archivos a procesar
-cant_arch = 6
-
-#for i in range(cant_arch):
-#	Puntos_Falla('g' + str(i+1) + '.txt')
-Puntos_Falla('g1.txt')
+Puntos_Falla()
 
 # -----------------------------------------
 
