@@ -11,7 +11,6 @@ def Puntos_Falla():
 	
 	# abre un archivo con datos
 	arch = str(sys.argv[1])
-	print(arch,".txt",sep="")
 	archivo = open(arch + ".txt",'r')
 	
 	# obtiene cantidad de vertices y aristas
