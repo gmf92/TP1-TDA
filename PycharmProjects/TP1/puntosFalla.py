@@ -4,7 +4,7 @@ import digrafo
 
 
 # Llamar a la funcion Puntos_Falla con parametro por linea de comando
-# Lleva un solo parametro, a elegir entre: g1, g2 , g3, g4
+# Lleva un sn solo parametro, a elegir entre: g1, g2 , g3, g4
 
 def Puntos_Falla():
 	
@@ -12,7 +12,7 @@ def Puntos_Falla():
 	arch = str(sys.argv[1])
 	print(arch,".txt",sep="")
 	archivo = open(arch + ".txt",'r')
-
+	
 	# obtiene cantidad de vertices y aristas
 	cant_v = int(archivo.readline())
 	cant_a = int(archivo.readline())
@@ -57,9 +57,7 @@ def Puntos_Falla():
 	
 	# contador de puntos de articulacion encontrados
 	cant_p = 0
-
-	sys.setrecursionlimit(50000)
-
+	
 	# llama al metodo recursivo para cada vertice
 	for i in range(cant_v):		
 		if visitado[i] == False: 
