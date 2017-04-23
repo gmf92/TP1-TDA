@@ -81,8 +81,8 @@ def imprimirCFC(grafo):
 
     componentesConexas = aux
 
-    print("El grafo G tiene " + str(grafo.obtenerNumeroDeVertices()) + " vertices")
-    print("El grafo G tiene " + str(grafo.obtenerNumeroDeAristas()) + " aristas")
+    print("El grafo G tiene ", str(grafo.obtenerNumeroDeVertices()), " vertices", sep="")
+    print("El grafo G tiene ",str(grafo.obtenerNumeroDeAristas())," aristas", sep="")
 
     print("El grafo G es: ")
     print(grafo.obtenerGrafo())
@@ -93,7 +93,7 @@ def imprimirCFC(grafo):
     print("Estas son las componentes fuertemente conexas del grafo dado:")
     print(componentesConexas)
 
-    print("El grafo G tiene " + str(numeroDeCFC) + " componentes fuertemente conexas")
+    print("El grafo G tiene ",str(numeroDeCFC), " componentes fuertemente conexas", sep="")
 
 
 
