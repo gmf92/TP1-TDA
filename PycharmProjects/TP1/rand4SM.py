@@ -3,12 +3,12 @@ from random import shuffle, randint
 def generarEntradasSM(n,m):
     
     E, H, Q = [],[],[]
-    for i in range(n):
+    for i in range(n+1):
         aux = list(range(m))
         shuffle(aux)
         E.append(aux)    
     vacantesTotales = 0
-    for i in range(m):
+    for i in range(m+1):
         aux = list(range(n))
         shuffle(aux)
         H.append(aux)
@@ -20,6 +20,9 @@ def generarEntradasSM(n,m):
         Q.append(vacantes)
 
     return E,H,Q
+
+    
+    
 
     
     
