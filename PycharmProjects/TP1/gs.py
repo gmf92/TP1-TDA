@@ -4,16 +4,18 @@ from rand4SM import *
 def generarPreferencias(E):
         """Devuelve un diccionario que contiene len(E) diccionarios. El diccionario i contiene las preferencias del elemento de índice i.
         Nótese: Menor valor indica mayor preferencia."""
+        pref = dict()
         for i in range(len(E)):
                 pref[i] = dict()
                 for j in range(len(E[i])):
                         pref[i][E[i][j]] = j
+        return pref
 
 def rangeQueue(n):
         """Devuelve una Cola con elementos de 0 a n encolados ordenadamente"""
         q = queue.Queue()
         for i in range(n):
-                pendientes.put(i)
+               q.put(i)
         return q
 
 def GS(A,E):
