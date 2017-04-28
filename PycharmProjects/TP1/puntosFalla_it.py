@@ -97,13 +97,13 @@ def Puntos_Falla():
 		
 		# si el nodo es raiz y tiene dos o mas hijos, 
 		# el nodo es punto de articulacion
-		if (ancestro[v] == -1) and (cant_h[v] > 1): 
+		if (a == -1) and (cant_h[v] > 1): 
 				puntos[v] = True
 
 		# si el nodo no es raiz, y su valor bajo es mayor o igual
 		# al momento de descubrimiento de su ancestro, 
 		# el ancestro es punto de articulacion 
-		if ancestro[v] != -1  and bajo[v] >= descubrimiento[a]: 
+		if a != -1  and bajo[v] >= descubrimiento[a]: 
 				puntos[a] = True	
 			      
 	# para medir la ejecucion
