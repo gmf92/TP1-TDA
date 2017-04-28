@@ -55,8 +55,7 @@ def Puntos_Falla():
 	cant_h = [0] * (cant_v)
 	
 	#inicializa la pila
-	pila = []
-	pila.append(0)
+	pila = [0]
 	
 	# contador de puntos de articulacion
 	cant_p = 0
@@ -67,25 +66,30 @@ def Puntos_Falla():
 	# lista auxiliar
 	ext = []
 	
-	# visita los nodos del grafo, crea las listas de visitados,
-	# momentos de descubrimiento, valores bajo, cantidad de hijos,
-	# y ancestros de los nodos visitados
+	# visita los nodos del grafo, crea las listas de: visitados,
+	# descubrimiento, bajo, cantidad de hijos y ancestros
 	while pila:
 		v = pila.pop()
 		if visited[v] == False:
+			# marca el nodo como visitado y le asigna el
+			# momento de descubrimiento y el valor bajo
 			visited[v] = True
 			visitado.append(v)
 			descubrimiento[v] = momento
 			bajo[v] = momento
 			momento += 1
+			# agrega a la pila los adyacentes no visitados del nodo
 			for i in grafo.adyacentes[v]:
 				if visited[i] == False:
 					ext.append(i)
 			pila.extend(ext)
 			cant_h[v] = len(ext)
+			# asigna al nodo como ancestro a sus adyacentes no visitados
+			# y calcula el valor bajo de cada uno
 			for w in ext:
 				ancestro[w] = v
 				bajo[v] = min(bajo[v], bajo[w])
+			# vacia la lista auxiliar
 			ext.clear()
 	
 	# recorre la lista visitados, obteniendo los
@@ -97,7 +101,7 @@ def Puntos_Falla():
 		
 		# si el nodo es raiz y tiene dos o mas hijos, 
 		# el nodo es punto de articulacion
-		if (a == -1) and (cant_h[v] > 1): 
+		if (a == -1) and (cant_h[v] >= 2): 
 			puntos[v] = True
 
 		# si el nodo no es raiz, y su valor bajo es mayor o igual
@@ -116,10 +120,10 @@ def Puntos_Falla():
 	print('Archivo: ',arch,".txt")
 	print('Cantidad de vertices: ', cant_v)
 	print('Cantidad de aristas : ', cant_a)
-	print("Puntos de articulacion : ")
+	print("Puntos de articulacion : ",end="")
 	for index, value in enumerate (puntos):
 		if value == True:
-			print(index, " ",end="")
+			print(index,end=" ")
 			cant_p += 1
 	print("\nCantidad de puntos de articulacion: ", cant_p)
 	print('Tiempo de ejecucion: ', (fin - inicio) * 1000, 'milisegundos\n')
