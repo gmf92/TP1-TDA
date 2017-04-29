@@ -6,7 +6,7 @@ import digrafo
 # Llama a la funcion Puntos_Falla con parametro por linea de comando
 # Lleva un solo parametro, a elegir entre: g1, g2 , g3, g4, g5, g6
 
-# Ejemplo de linea de comando: puntosfallait.py g1
+# Ejemplo de linea de comando: puntosFalla_it.py g1
 
 def Puntos_Falla():
 	
