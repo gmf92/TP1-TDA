@@ -32,11 +32,10 @@ def Puntos_Falla():
 	
 	#---------------------------------
 	
-	# para medir la ejecucion
-	inicio = time()
+	# lista para guardar los visitados
+	visitado = []
 	
 	# marca todos los vertices como no visitados
-	visitado = []
 	visited = [False] * (cant_v)
 	
 	# inicializa momentos de descubrimiento
@@ -54,8 +53,12 @@ def Puntos_Falla():
 	#inicializa cantidad de hijos para cada vertice
 	cant_h = [0] * (cant_v)
 	
-	#inicializa la pila
-	pila = [0]
+	# crea e inicializa la pila y pila_aux
+	pila = []
+	pila.append(0)
+	
+	pila_aux = set()
+	pila_aux.add(0)
 	
 	# contador de puntos de articulacion
 	cant_p = 0
@@ -63,39 +66,31 @@ def Puntos_Falla():
 	# momento de descubrimiento
 	momento = 0
 	
-	# lista auxiliar
-	ext = []
+	# para medir la ejecucion
+	inicio = time()
 	
-	# visita los nodos del grafo, crea las listas de: visitados,
-	# descubrimiento, bajo, cantidad de hijos y ancestros
+	# visita los nodos del grafo usando DFS, creando las listas de
+	# visitados, descubrimiento, bajo, cantidad de hijos y ancestros
 	while pila:
 		v = pila.pop()
-		if visited[v] == False:
-			# marca el nodo como visitado y le asigna el
-			# momento de descubrimiento y el valor bajo
+		if visited[v] == False:			
 			visited[v] = True
 			visitado.append(v)
 			descubrimiento[v] = momento
 			bajo[v] = momento
 			momento += 1
-			# agrega a la pila los adyacentes no visitados del nodo
+			
+			# agrega a la pila los adyacentes del nodo no visitados,
 			for i in grafo.adyacentes[v]:
-				if visited[i] == False:
-					ext.append(i)
-			pila.extend(ext)
-			cant_h[v] = len(ext)
-			# asigna al nodo como ancestro a sus adyacentes no visitados
-			# y calcula el valor bajo de cada uno
-			for w in ext:
-				ancestro[w] = v
-				bajo[v] = min(bajo[v], bajo[w])
-			# vacia la lista auxiliar
-			ext.clear()
+				if (visited[i] == False) and (i not in pila_aux):
+					pila_aux.add(i)
+					pila.append(i)
+					cant_h[v] += 1
+					ancestro[i] = v
+					bajo[v] = min(bajo[v], bajo[i])
 	
-	# recorre la lista visitados, obteniendo los
-	# puntos de articulacion
+	# recorre visitados, obtiene puntos de articulacion
 	while visitado:
-		# obtiene un nodo y su ancestro
 		v = visitado.pop()		
 		a = ancestro[v]
 		
@@ -106,11 +101,10 @@ def Puntos_Falla():
 
 		# si el nodo no es raiz, y su valor bajo es mayor o igual
 		# al momento de descubrimiento de su ancestro, 
-		# el ancestro es punto de articulacion 
+		# entonces el ancestro es punto de articulacion 
 		if (a != -1)  and (bajo[v] >= descubrimiento[a]): 
 			puntos[a] = True	
 			      
-	# para medir la ejecucion
 	fin = time()
 	
 	#---------------------------
@@ -133,4 +127,5 @@ def Puntos_Falla():
 Puntos_Falla()
 
 # -----------------------------------------
+
 
